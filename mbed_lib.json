@@ -1,0 +1,45 @@
+{
+    "name": "google-client",
+    "config": {
+        "iotc-bsp-debug-log": {
+            "help": "Enable/Disable the bsp debug log, Defaults to 0 logs are disabled.",
+	    "value": "0",
+	    "macro_name": "BSP_DEBUG_LOG"            
+        },
+	"iotc-debug-output": {
+            "help": "Enable/Disable the debug log, Defaults to 0 disbaled the logs.",
+	    "value": "0",
+	    "macro_name": "IOTC_DEBUG_OUTPUT"            
+        },
+	"iotc-debug-printf": {
+            "help": "Sets an alternative to puts for logs output. Especially useful to synchronize output with mbed-trace",
+	    "value": "",
+	    "macro_name": "IOTC_DEBUG_PRINTF"            
+        },
+	"iotc-mqtt-max-payload-size": {
+            "help": "MQTT maximum payload size, Defaults to (1024 * 128) if undefined.",
+	    "value": "(1024 * 128)",
+	    "macro_name": "IOTC_MQTT_MAX_PAYLOAD_SIZE"            
+        },
+	"iotc-default-idle-timeout": {
+            "help": "IOTC default idle timeout, Defaults to 1 if undefined.",
+	    "value": "1",
+	    "macro_name": "IOTC_DEFAULT_IDLE_TIMEOUT"            
+        },
+	"iotc-max-idle-timeout": {
+            "help": "IOTC maximum idle timeout, Defaults to 5 if undefined.",
+	    "value": "5",
+	    "macro_name": "IOTC_MAX_IDLE_TIMEOUT"            
+        },
+	"iotc-mqtt-port": {
+            "help": "IOTC MQTT port number, Defaults to 8883 if undefined.",
+	    "value": "8883",
+	    "macro_name": "IOTC_MQTT_PORT"            
+        },
+	"iotc-mqtt-host": {
+            "help": "IOTC MQTT host configuration. Defaults to mqtt.2030.ltsapis.goog host and port number 8883 if undefined",
+            "value": "{\"mqtt.2030.ltsapis.goog\", IOTC_MQTT_PORT}",
+	    "macro_name": "IOTC_MQTT_HOST"
+        }		
+    }
+}
