@@ -1,4 +1,5 @@
 /* Mbed OS Google Cloud BSP
+ * Copyright (c) 2018-2020, Google LLC.
  * Copyright (c) 2019-2020, Arm Limited and affiliates.
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -15,23 +16,18 @@
  * limitations under the License.
  */
 #include "mbed.h"
-#include "mbed_trace.h"
-
-#define TRACE_GROUP "GoogleCloudPort"
 
 #include <iotc_bsp_io_net.h>
 #include <stdio.h>
 #include <string.h>
 #include "iotc_macros.h"
+#include <iotc_bsp_debug.h>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef MAX
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#endif
 iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
     iotc_bsp_socket_t *iotc_socket, const char *host, uint16_t port,
     iotc_bsp_socket_type_t socket_type)
@@ -39,27 +35,29 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
     nsapi_error_t result = NSAPI_ERROR_OK;
     auto net = NetworkInterface::get_default_instance();
     auto conn = new TCPSocket;
+    MBED_ASSERT(conn != nullptr);
     if (!net) {
-        tr_error("Error! No network inteface found.\n");
+        iotc_bsp_debug_logger("Error! No network inteface found.\n");
         goto DISCONNECT;
     }
 
     result = net->connect();
     if (NSAPI_ERROR_OK != result) {
-        tr_error("failed to connect with : %d", result);
+        iotc_bsp_debug_format("failed to connect with : %d", result);
         goto DISCONNECT;
     }
 
     result = conn->open(net);
     if (result != NSAPI_ERROR_OK) {
-        tr_error("Error! socket.open() returned: %d\n", result);
+        iotc_bsp_debug_format("Error! socket.open() returned: %d\n", result);
         goto DISCONNECT;
     }
+
     {
         SocketAddress addr;
         result = net->gethostbyname(host, &addr);
         if (result != NSAPI_ERROR_OK) {
-            tr_error("Error! DNS resolution for %s failed with %d", host, result);
+            iotc_bsp_debug_format("Error! DNS resolution for %s failed with %d", host, result);
             goto DISCONNECT;
         }
         addr.set_port(port);
@@ -67,14 +65,17 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
         result = conn->connect(addr);
 
         if (result != NSAPI_ERROR_OK) {
-            tr_error("Error! socket.connect() returned: %d\n", result);
+            iotc_bsp_debug_format("Error! socket.connect() returned: %d\n", result);
             goto DISCONNECT;
         }
+        conn->set_blocking(false);
     }
-    iotc_socket = (iotc_bsp_socket_t *)conn;
+    *iotc_socket = (iotc_bsp_socket_t)conn;
     return IOTC_BSP_IO_NET_STATE_OK;
+
 DISCONNECT:
     delete conn;
+    *iotc_socket = 0;
     // Bring down the network interface
     net->disconnect();
 
@@ -115,7 +116,7 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_write(iotc_bsp_socket_t iotc_socket,
 
     if (res < 0) {
         *out_written_count = 0;
-        tr_error("failed to send data with %d", res);
+        iotc_bsp_debug_format("failed to send data with %d", res);
 
         if (NSAPI_ERROR_NO_SOCKET == res) {
             return IOTC_BSP_IO_NET_STATE_CONNECTION_RESET;
@@ -137,12 +138,11 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_read(iotc_bsp_socket_t iotc_socket,
                                              size_t count)
 {
 
-    ((TCPSocket *)iotc_socket)->set_blocking(false);
     auto res = ((TCPSocket *)iotc_socket)->recv(buf, count);
 
     if (res < 0) {
         *out_read_count = 0;
-        tr_error("failed to recv data with %d", res);
+        iotc_bsp_debug_format("failed to recv data with %d", res);
 
         if (NSAPI_ERROR_NO_SOCKET == res) {
             return IOTC_BSP_IO_NET_STATE_CONNECTION_RESET;
@@ -154,8 +154,6 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_read(iotc_bsp_socket_t iotc_socket,
 
         return IOTC_BSP_IO_NET_STATE_ERROR;
 
-    } else if (res != count) {
-        tr_warning("Unexpected recv length (got %u, expected %u)", res, count);
     }
     *out_read_count = res;
 
