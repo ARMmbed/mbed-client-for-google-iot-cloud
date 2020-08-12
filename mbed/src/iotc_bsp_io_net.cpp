@@ -34,16 +34,11 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
 {
     nsapi_error_t result = NSAPI_ERROR_OK;
     auto net = NetworkInterface::get_default_instance();
+    MBED_ASSERT(net != nullptr);
     auto conn = new TCPSocket;
     MBED_ASSERT(conn != nullptr);
     if (!net) {
         iotc_bsp_debug_logger("Error! No network inteface found.\n");
-        goto DISCONNECT;
-    }
-
-    result = net->connect();
-    if (NSAPI_ERROR_OK != result) {
-        iotc_bsp_debug_format("failed to connect with : %d", result);
         goto DISCONNECT;
     }
 
@@ -76,8 +71,6 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
 DISCONNECT:
     delete conn;
     *iotc_socket = 0;
-    // Bring down the network interface
-    net->disconnect();
 
     return IOTC_BSP_IO_NET_STATE_ERROR;
 }
@@ -87,18 +80,6 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_connection_check(
 {
     IOTC_UNUSED(host);
     IOTC_UNUSED(port);
-
-    int valopt = 0;
-    unsigned lon = sizeof(int);
-
-    if (((TCPSocket *)iotc_socket)->getsockopt(NSAPI_SOCKET, 0, (void *)(&valopt), &lon) <
-            0) {
-        return IOTC_BSP_IO_NET_STATE_ERROR;
-    }
-
-    if (valopt) {
-        return IOTC_BSP_IO_NET_STATE_ERROR;
-    }
 
     return IOTC_BSP_IO_NET_STATE_OK;
 }
