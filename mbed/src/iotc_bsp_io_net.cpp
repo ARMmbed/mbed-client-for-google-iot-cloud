@@ -71,7 +71,7 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
 DISCONNECT:
     delete conn;
     *iotc_socket = 0;
-    
+
     return IOTC_BSP_IO_NET_STATE_ERROR;
 }
 
