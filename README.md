@@ -1,4 +1,4 @@
-# Google Cloud Mbed OS SDK port library
+# Google Cloud IoT Device SDK port for Mbed OS
 
 This library provides the port of the Google Cloud IoT Device SDK for Embedded C for Mbed OS. It can be used to connect devices running Mbed OS to the Google IoT Core over MQTT.
 
