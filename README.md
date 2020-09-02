@@ -8,7 +8,7 @@ To use this library, an Mbed OS application needs to
 
 Then it will be able to use [APIs](https://googlecloudplatform.github.io/iot-device-sdk-embedded-c/bsp/html/index.html) from the Google cloud IoT Device SDK.
 
-An example demonstrating the use of this library has been provided as part of the official Mbed OS examples [here](https://github.com/ARMmbed/mbed-os-example-google-cloud.git).
+An example demonstrating the use of this library has been provided as part of the official Mbed OS examples [here](https://github.com/ARMmbed/mbed-os-example-for-google-iot-cloud.git).
 
 ## Summary
 
