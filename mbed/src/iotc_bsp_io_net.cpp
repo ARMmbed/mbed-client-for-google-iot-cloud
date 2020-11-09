@@ -33,6 +33,11 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
     iotc_bsp_socket_type_t socket_type)
 {
     nsapi_error_t result = NSAPI_ERROR_OK;
+
+    if (NULL == iotc_socket) {
+          return IOTC_BSP_IO_NET_STATE_ERROR;
+    }
+
     auto net = NetworkInterface::get_default_instance();
     MBED_ASSERT(net != nullptr);
     auto conn = new TCPSocket;
@@ -69,7 +74,11 @@ iotc_bsp_io_net_state_t iotc_bsp_io_net_socket_connect(
     return IOTC_BSP_IO_NET_STATE_OK;
 
 DISCONNECT:
-    delete conn;
+    if(conn != nullptr) {
+        conn->close();
+        delete conn;
+    }
+
     *iotc_socket = 0;
 
     return IOTC_BSP_IO_NET_STATE_ERROR;
