@@ -1,0 +1,82 @@
+# Copyright (c) 2020 ARM Limited. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+add_library(mbed-client-for-google-iot-cloud INTERFACE)
+
+target_include_directories(mbed-client-for-google-iot-cloud
+    INTERFACE
+        .
+        mbed/include/bsp
+        iot-device-sdk-embedded-c/include
+        iot-device-sdk-embedded-c/src/bsp
+        iot-device-sdk-embedded-c/src/libiotc
+        iot-device-sdk-embedded-c/src/libiotc/io/fs
+        iot-device-sdk-embedded-c/src/libiotc/io/net
+        iot-device-sdk-embedded-c/src/libiotc/control_topic
+        iot-device-sdk-embedded-c/src/libiotc/datastructures
+        iot-device-sdk-embedded-c/src/libiotc/event_dispatcher
+        iot-device-sdk-embedded-c/src/libiotc/event_loop
+        iot-device-sdk-embedded-c/src/libiotc/memory
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/codec
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/logic
+        iot-device-sdk-embedded-c/src/libiotc/platform/iotc_thread
+        iot-device-sdk-embedded-c/src/libiotc/tls/certs
+        iot-device-sdk-embedded-c/src/libiotc/tls
+        iot-device-sdk-embedded-c/third_party/mqtt-protocol-c
+        iot-device-sdk-embedded-c/third_party/protobuf-c/library/protobuf-c
+)
+
+target_sources(mbed-client-for-google-iot-cloud
+    INTERFACE
+        mbed/src/iotc_bsp_time.cpp
+        mbed/src/iotc_bsp_rng.c
+        mbed/src/iotc_bsp_mem.c
+        mbed/src/iotc_bsp_crypto_mbedtls.c
+        mbed/src/iotc_bsp_io_net.cpp
+        iot-device-sdk-embedded-c/src/bsp/tls/mbedtls/iotc_bsp_tls_mbedtls.c
+        iot-device-sdk-embedded-c/src/libiotc/io/fs/iotc_resource_manager.c
+        iot-device-sdk-embedded-c/src/libiotc/io/fs/iotc_fs_filenames.c
+        iot-device-sdk-embedded-c/src/libiotc/io/fs/iotc_fs_bsp_to_iotc_mapping.c
+        iot-device-sdk-embedded-c/src/libiotc/io/fs/memory/iotc_fs_memory.c
+        iot-device-sdk-embedded-c/src/libiotc/io/net/iotc_io_net_layer.c
+        iot-device-sdk-embedded-c/src/libiotc/control_topic/iotc_control_topic_layer.c
+        iot-device-sdk-embedded-c/src/libiotc/datastructures/iotc_vector.c
+        iot-device-sdk-embedded-c/src/libiotc/event_dispatcher/iotc_time_event.c
+        iot-device-sdk-embedded-c/src/libiotc/event_dispatcher/iotc_event_thread_dispatcher.c
+        iot-device-sdk-embedded-c/src/libiotc/event_dispatcher/iotc_event_handle.c
+        iot-device-sdk-embedded-c/src/libiotc/event_dispatcher/iotc_event_dispatcher.c
+        iot-device-sdk-embedded-c/src/libiotc/event_loop/iotc_event_loop.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_internals.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_helpers.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_handle.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_globals.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_error.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_debug.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_data_desc.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_connection_data.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_backoff_status_api.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_user_sub_call_wrapper.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_tuples.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_timed_task.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_layer_default_functions.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_layer_default_allocators.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_layer_api.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_jwt.c
+        iot-device-sdk-embedded-c/src/libiotc/iotc_io_timeouts.c
+        iot-device-sdk-embedded-c/src/libiotc/memory/iotc_allocator.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/codec/iotc_mqtt_codec_layer.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/codec/iotc_mqtt_codec_layer_data.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/logic/iotc_mqtt_logic_layer_task_helpers.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/logic/iotc_mqtt_logic_layer_keepalive_handler.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/logic/iotc_mqtt_logic_layer_data.c
+        iot-device-sdk-embedded-c/src/libiotc/mqtt/logic/iotc_mqtt_logic_layer.c
+        iot-device-sdk-embedded-c/src/libiotc/tls/certs/iotc_RootCA_list.c
+        iot-device-sdk-embedded-c/src/libiotc/tls/iotc_tls_layer.c
+        iot-device-sdk-embedded-c/third_party/mqtt-protocol-c/iotc_mqtt_serialiser.c
+        iot-device-sdk-embedded-c/third_party/mqtt-protocol-c/iotc_mqtt_parser.c
+        iot-device-sdk-embedded-c/third_party/mqtt-protocol-c/iotc_mqtt_message.c
+        iot-device-sdk-embedded-c/third_party/mqtt-protocol-c/iotc_debug_data_desc_dump.c
+        iot-device-sdk-embedded-c/third_party/protobuf-c/library/protobuf-c.c
+)
+
