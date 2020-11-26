@@ -35,11 +35,6 @@
           "help": "IOTC MQTT port number, Defaults to 8883 if undefined.",
 	    "value": "8883",
 	    "macro_name": "IOTC_MQTT_PORT"
-        },
-	"iotc-mqtt-host": {
-          "help": "IOTC MQTT host configuration. Defaults to mqtt.2030.ltsapis.goog host and port number 8883 if undefined",
-          "value": "{\"mqtt.2030.ltsapis.goog\", IOTC_MQTT_PORT}",
-	    "macro_name": "IOTC_MQTT_HOST"
         }
     }
 }
